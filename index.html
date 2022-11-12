@@ -1,47 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>title</title>
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">
-     <script src="https://kit.fontawesome.com/2c7fc28a2f.js"></script>
-     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <div id="container">
-      <div id="toggleContainer">
-         <label>Carousel</label>
-         <div id="toggle">
-           <div id="outer3">
-              <div id="slider3"></div>
-           </div>
-           <label>Tiles</label>
-        </div>
-      </div>
-      <div id="galleryView">
-        <div id="galleryContainer">
-           <div id="leftView"></div>
-           <button id="navLeft" class="navBtns"><i class="fas fa-arrow-left fa-3x"></i></button>
-           <a id="linkTag">
-              <div id="mainView"></div>
-           </a>
-           <div id="rightView"></div>
-           <button id="navRight" class="navBtns"><i class="fas fa-arrow-right fa-3x"></i></button>
-        </div>
-      </div>
-      <div id="tilesView">
-        <div id="tilesContainer"></div>
-      </div>
-    </div>
-  </body>
-</html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            /* CSS Styles */
 
-<!-- echo "# CarouselTask" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/asgatcreation/CarouselTask.git
-git push -u origin main -->
+            body {
+              font-family: Arial, Helvetica, sans-serif;
+              background-color: yellow;
+              padding: 0;
+              margin: 0;
+              color: goldenrod;
+              box-sizing: border-box;
+              font-weight: bold;
+            }
+
+            .container {
+                width: 1200px;
+                margin: auto;
+            }
+
+            /* Developer Styles */
+            #slides {
+                width: 1200px;
+                height: 400px;
+                margin: auto;
+            }
+
+            .small-slides {
+                width: 300px;
+                height: 169px;
+                margin: auto;
+            }
+
+            .card-row {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .card-row > div {
+                margin: 1em;
+                flex: 1;
+            }
+        </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>MY CAROUSEL SLIDESHOW TASK</h1>
+        
+        
+        <!-- Big Slideshow -->
+        <!-- delay 8 secs transition time 0.4 secs-->
+        <div id="slides" class="ms-slides" data-delay="8000" data-transition="500">
+          <!-- Define the Slide Show Elements -->
+          <div class="ms-slides__inner">
+            <img src="/img/dembele1.jpg" class="imgsize" alt="Ousmane Dembele Magical">
+            <img src="/img/dembele2.jpg" class="imgsize" alt="Dembele at Spotify Camp Nou">
+            <img src="/img/dembele3.jpg" class="imgsize"  alt="Dembele celebrating a goal scored for Barcelona at US">
+            <img src="/img/dembele7.jpg" class="imgsize"  alt="Dembele with the world cup trophy in 2018">
+            <img src="/img/dembele5.jpg" class="imgsize" alt="Dembele celebrating his goal with barcelona team players">
+            <img src="/img/dembele6.jpg" class="imgsize"  alt="A Married Ousmane Dembele">
+          </div>
+
+                    <!-- <img src="/img/dembele1.jpg" width="1200" height="400" alt="Ousmane Dembele Magical">
+                    <img src="/img/dembele2.jpg" width="1200" height="400" alt="Dembele at Spotify Camp Nou">
+                    <img src="/img/dembele3.jpg" width="1200" height="400" alt="Dembele celebrating a goal scored for Barcelona at US">
+                    <img src="/img/dembele7.jpg" width="1200" height="400" alt="Dembele with the world cup trophy in 2018">
+                    <img src="/img/dembele5.jpg" width="1200" height="400" alt="Dembele celebrating his goal with barcelona team players">
+                    <img src="/img/dembele6.jpg" width="1200" height="400" alt="A Married Ousmane Dembele"> -->
+
+          <!-- Show Indicators -->
+          <ol class="ms-slides__indicators">
+            <!-- slide indicators -->
+          </ol>
+
+          <!-- Show Next and Previous Buttons -->
+          <a href="#" class="ms-slides__next-button"></a>
+          <a href="#" class="ms-slides__prev-button"></a>
+        </div>
+        <!-- Notes -->
+        <div>
+          <p>This example shows all features in use. Slides are changing every 
+            8 seconds with 500 millisecond transition. The buttons and 
+          indicators are visible.</p>
+        </div>
+
+
+
+        <script src="script.js"></script>
+        <script>
+            // Other code 
+        </script>
+    </body>
+</html>

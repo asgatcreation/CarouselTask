@@ -1,107 +1,133 @@
-document.getElementById("outer3").addEventListener("click", toggleState3);
-    
-function toggleState3() {
-  let galleryView = document.getElementById("galleryView")
-  let tilesView = document.getElementById("tilesView")
-  let outer = document.getElementById("outer3");
-  let slider = document.getElementById("slider3");
-  let tilesContainer = document.getElementById("tilesContainer");
-  if (slider.classList.contains("active")) {
-    slider.classList.remove("active");
-    outer.classList.remove("outerActive");
-    galleryView.style.display = "flex";
-    tilesView.style.display = "none";
-    
-    while (tilesContainer.hasChildNodes()) {
-      tilesContainer.removeChild(tilesContainer.firstChild)
-      }  
-  } else {
-    slider.classList.add("active");
-    outer.classList.add("outerActive");
-    galleryView.style.display = "none";
-    tilesView.style.display = "flex";
-     
-    for (let i = 0; i < imgObject.length - 1; i++) {
-      let tileItem = document.createElement("div");
-      tileItem.classList.add("tileItem");
-      tileItem.style.background =  "url(" + imgObject[i] + ")";
-      tileItem.style.backgroundSize = "contain";  
-      tilesContainer.appendChild(tileItem);      
-    }
-  };
-}
 
-let imgObject = [
-  "https://placeimg.com/450/450/any",
-  "https://placeimg.com/450/450/animals",
-  "https://placeimg.com/450/450/architecture",
-  "https://placeimg.com/450/450/nature",
-  "https://placeimg.com/450/450/people",
-  "https://placeimg.com/450/450/tech",
-  "https://picsum.photos/id/1/450/450",
-  "https://picsum.photos/id/8/450/450",
-  "https://picsum.photos/id/12/450/450",
-  "https://picsum.photos/id/15/450/450",
-  "https://picsum.photos/id/5/450/450",
-];
+(function() {
 
-let mainImg = 0;
-let prevImg = imgObject.length - 1;
-let nextImg = 1;
+  // ---------------------------------------------------------
+  // Define Constants 
 
-function loadGallery() {
+  const MS_SLIDES = '.ms-slides'
+  const MS_SLIDES_INNER = '.ms-slides__inner'
+  const MS_SLIDES_NEXT_BUTTON = '.ms-slides__next-button'
+  const MS_SLIDES_PREV_BUTTON = '.ms-slides__prev-button'
+  const MS_SLIDES_INDICATORS = '.ms-slides__indicators'
+  const BUTTON_COLOR = 'rgba(255,255,255,0.5)'
+  const BUTTON_COLOR_SELECTED = 'rgba(255,255,255,1.0)'
 
-  let mainView = document.getElementById("mainView");
-  mainView.style.background = "url(" + imgObject[mainImg] + ")";
+  // ---------------------------------------------------------
+  // Make Slides 
 
-  let leftView = document.getElementById("leftView");
-  leftView.style.background = "url(" + imgObject[prevImg] + ")";
-  
-  let rightView = document.getElementById("rightView");
-  rightView.style.background = "url(" + imgObject[nextImg] + ")";
-  
-  let linkTag = document.getElementById("linkTag")
-  linkTag.href = imgObject[mainImg];
+  function makeSlideshow(slides) {
+      // const slides = document.getElementById(slidesId)
+      const slidesInner = slides.querySelector(MS_SLIDES_INNER)
+      const images = slidesInner.querySelectorAll('*')
 
-};
+      // ---------------------------------
+      // Setup buttons 
 
-function scrollRight() {
-  
-  prevImg = mainImg;
-  mainImg = nextImg;
-  if (nextImg >= (imgObject.length -1)) {
-    nextImg = 0;
-  } else {
-    nextImg++;
-  }; 
-  loadGallery();
-};
+      const nextButton = slides.querySelector(MS_SLIDES_NEXT_BUTTON)
+      const prevButton = slides.querySelector(MS_SLIDES_PREV_BUTTON)
 
-function scrollLeft() {
-  nextImg = mainImg
-  mainImg = prevImg;
-   
-  if (prevImg === 0) {
-    prevImg = imgObject.length - 1;
-  } else {
-    prevImg--;
-  };
-  loadGallery();
-};
+      console.log(slides)
 
-document.getElementById("navRight").addEventListener("click", scrollRight);
-document.getElementById("navLeft").addEventListener("click", scrollLeft);
-document.getElementById("rightView").addEventListener("click", scrollRight);
-document.getElementById("leftView").addEventListener("click", scrollLeft);
-document.addEventListener('keyup',function(e){
-    if (e.keyCode === 37) {
-    scrollLeft();
-  } else if(e.keyCode === 39) {
-    scrollRight();
+      if (nextButton !== null) {
+          nextButton.addEventListener('click', function(e) {
+              e.preventDefault()
+              // clear the interval
+              // add a new interval
+              nextSlide()
+          })
+      }
+
+      if (prevButton !== null) {
+          prevButton.addEventListener('click', function(e) {
+              e.preventDefault()
+
+              prevSlide()
+          })
+      }
+
+      // ---------------------
+      // Setup indicators 
+
+      const indicatorContainer = slides.querySelector(MS_SLIDES_INDICATORS)
+      const indicators = []
+      if (indicatorContainer !== null) {
+          for (let i = 0; i < images.length; i += 1) {
+              const li = document.createElement('li') // <li>
+              indicatorContainer.appendChild(li)
+              indicators.push(li)
+          }
+          indicators[0].style.backgroundColor = BUTTON_COLOR_SELECTED
+      }
+
+      // ---------------------
+      // Setup timer 
+
+      let delay = parseInt(slides.dataset.delay)
+      let transition = parseInt(slides.dataset.transition)
+
+      if (slides.dataset.delay === null) {
+        delay = 3000
+      }
+
+      if (slides.dataset.transition === null) {
+        transition = 400
+      }
+
+      slidesInner.style.transition = `${transition}ms`
+
+      const slidesWidth = slides.clientWidth
+      
+      let index = 0
+
+      if (!isNaN(delay) && delay > 0) {
+        setInterval(nextSlide, delay)
+      } 
+        
+      // clearInterval(interval)
+
+      // ------------------------
+
+      function nextSlide() {
+          index += 1
+          if (index === images.length) {
+              index = 0
+          }
+          showSlide()
+      }
+
+      function prevSlide() {
+          index -= 1
+          if (index < 0) {
+              index = images.length - 1
+          }
+          showSlide()
+      }
+
+      function showSlide() {
+          // CSS - transform : translate3d(0, 0, 0);
+          slidesInner.style.transform = `translate3d(${index * -slidesWidth}px, 0, 0)`
+          // console.log(index * -slidesWidth)
+          indicators.forEach(function(el, i) {
+              if (i === index) {
+                  el.style.backgroundColor = BUTTON_COLOR_SELECTED
+              } else {
+                  el.style.backgroundColor = BUTTON_COLOR
+              }
+          })
+      }
+
+  } // end makeSlideshow
+  // ------------------------------------------------------------
+
+  // ------------------------------------------------------------
+  // Initialize Slides 
+
+  const slideshows = document.querySelectorAll(MS_SLIDES)
+
+  for (let i = 0; i < slideshows.length; i += 1) {
+      makeSlideshow(slideshows[i])
   }
-});
 
-loadGallery();
-
+})() // IIFE
 
 
